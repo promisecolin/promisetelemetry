@@ -25,3 +25,4 @@ FINAL YEAR REPORT FINAL/
 # Local-only compose overrides for running everything on one machine
 docker-compose.local.yml
 monitoring/docker-compose.local-override.yml
+docker-compose.tunnel.yml
