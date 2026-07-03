@@ -66,6 +66,28 @@ docker compose -f docker-compose.yml -f docker-compose.local.yml down
 docker compose -p monitoring -f monitoring/docker-compose.monitoring.yml -f monitoring/docker-compose.local-override.yml down
 ```
 
+### Public Access (Cloudflare Tunnel)
+
+To make the app/Grafana/Prometheus reachable from any device over the internet (not just `localhost`), start the tunnels (requires the app + monitoring stack from Option C already running):
+
+```bash
+docker compose -p tunnel -f docker-compose.tunnel.yml up -d
+```
+
+Then get the current public URLs:
+```bash
+./tunnel-urls.sh
+```
+
+These are **Cloudflare quick tunnels** — free, no account or domain needed, but each URL is random and **changes every time the tunnel containers restart**. Always re-run `tunnel-urls.sh` after starting/restarting them rather than bookmarking a URL. A stable custom-domain URL is possible later via a Cloudflare named tunnel (needs a domain on a free Cloudflare account) or Tailscale Funnel — ask if you want to switch to one of those.
+
+Stop the tunnels with:
+```bash
+docker compose -p tunnel -f docker-compose.tunnel.yml down
+```
+
+**Security note:** Prometheus has no authentication, so anyone with its tunnel URL can query all metrics — acceptable only because the URL is an unguessable random string, not real access control.
+
 ## Architecture
 
 ```
