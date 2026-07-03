@@ -4,7 +4,9 @@ A cloud-native e-commerce observability platform with real-time telemetry simula
 
 ## Live Endpoints
 
-| Service | URL |
+**Currently offline.** The AWS account these were deployed under has been suspended; the app and monitoring stack below are run locally in Docker until a new AWS account is set up and redeployment happens. See [DEPLOYMENT.md](DEPLOYMENT.md) for the old resource IDs (kept as a runbook for the redeploy).
+
+| Service | URL (when deployed) |
 |---------|-----|
 | **App** | http://promisetelemetry-alb-687682726.us-east-1.elb.amazonaws.com |
 | **Grafana** | http://44.195.208.73:3000 |
@@ -14,16 +16,55 @@ A cloud-native e-commerce observability platform with real-time telemetry simula
 
 **Prerequisites:** Node.js 20+, Docker
 
-1. Install dependencies:
-   ```
-   npm install
-   ```
-2. Copy `.env.example` to `.env` and set your `GEMINI_API_KEY` (optional — app falls back to rule-based diagnostics)
-3. Run the app:
-   ```
-   npm run dev
-   ```
-4. Open http://localhost:3000
+### Option A — app only, no Docker
+
+```
+npm install
+```
+Copy `.env.example` to `.env` and set your `GEMINI_API_KEY` (optional — app falls back to rule-based diagnostics), then:
+```
+npm run dev
+```
+Open http://localhost:3000
+
+### Option B — app in Docker (dev, hot-reload)
+
+```
+docker compose up -d
+```
+Open http://localhost:3000
+
+### Option C — full stack in Docker: app + monitoring (Prometheus/Grafana/OTel Collector)
+
+Runs everything on one machine, including the observability stack. Three extra files make this work locally (gitignored, not part of the repo since they're machine-specific — see comments in each file for why):
+
+- `monitoring/.env` — placeholder AWS creds (X-Ray/CloudWatch exporters need AWS and won't work without it) + a local Grafana admin password
+- `monitoring/docker-compose.local-override.yml` — moves Grafana off port 3000 so it doesn't clash with the app
+- `docker-compose.local.yml` — attaches the app container to the monitoring network and points its OTel exporter at `otel-collector` instead of `localhost`
+
+Create `monitoring/.env` from `monitoring/.env.example` (any placeholder values work for AWS creds locally), then:
+
+```bash
+# 1. start the monitoring stack first (creates the shared network)
+docker compose -p monitoring -f monitoring/docker-compose.monitoring.yml -f monitoring/docker-compose.local-override.yml --env-file monitoring/.env up -d
+
+# 2. start the app, attached to that network
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d
+```
+
+| Service | URL |
+|---------|-----|
+| App | http://localhost:3000 |
+| Grafana | http://localhost:3001 (admin / value of `GRAFANA_ADMIN_PASSWORD` in `monitoring/.env`) |
+| Prometheus | http://localhost:9090 |
+
+Metrics flow end-to-end (app → OTel Collector → Prometheus → Grafana). Traces/logs panels relying on X-Ray/CloudWatch will show no data locally since those need real AWS.
+
+To stop everything:
+```bash
+docker compose -f docker-compose.yml -f docker-compose.local.yml down
+docker compose -p monitoring -f monitoring/docker-compose.monitoring.yml -f monitoring/docker-compose.local-override.yml down
+```
 
 ## Architecture
 

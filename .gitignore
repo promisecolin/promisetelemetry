@@ -21,3 +21,7 @@ aws/
 
 # Unrelated large binaries, not part of the app backup
 FINAL YEAR REPORT FINAL/
+
+# Local-only compose overrides for running everything on one machine
+docker-compose.local.yml
+monitoring/docker-compose.local-override.yml
