@@ -1,0 +1,6 @@
+{
+  "name": "PromiseTelemetry",
+  "description": "An enterprise-grade, AI-powered observability platform with microservices simulation, real-time metrics, tracing, logs, alerts, and automated Gemini diagnostics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

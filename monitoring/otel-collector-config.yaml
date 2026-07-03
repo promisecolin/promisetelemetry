@@ -1,0 +1,58 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 5s
+    send_batch_size: 1024
+
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 512
+    spike_limit_mib: 128
+
+exporters:
+  # Prometheus exporter — Grafana scrapes this
+  prometheus:
+    endpoint: 0.0.0.0:8889
+    namespace: promisetelemetry
+
+  # AWS X-Ray for distributed traces
+  awsxray:
+    region: us-east-1
+
+  # CloudWatch Logs
+  awscloudwatchlogs:
+    region: us-east-1
+    log_group_name: /promisetelemetry/otel
+    log_stream_name: collector
+
+  # Debug logging (stdout) for troubleshooting
+  debug:
+    verbosity: basic
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [awsxray, debug]
+
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [prometheus, debug]
+
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [awscloudwatchlogs, debug]
+
+  telemetry:
+    logs:
+      level: info

@@ -1,0 +1,668 @@
+{
+    "id": null,
+    "uid": "pt-master",
+    "title": "PromiseTelemetry — Command Center",
+    "description": "Complete observability dashboard for the PromiseTelemetry e-commerce platform",
+    "tags": ["promisetelemetry"],
+    "timezone": "browser",
+    "refresh": "10s",
+    "time": { "from": "now-30m", "to": "now" },
+    "style": "dark",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "panels": [
+
+      {
+        "id": 100,
+        "type": "row",
+        "title": "📊  EXECUTIVE KPIs",
+        "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+        "collapsed": false
+      },
+
+      {
+        "id": 1,
+        "title": "Revenue",
+        "description": "Cumulative revenue from business orders",
+        "type": "stat",
+        "gridPos": { "h": 5, "w": 4, "x": 0, "y": 1 },
+        "targets": [{ "expr": "rate(promisetelemetry_business_revenue_usd_total[5m]) * 60", "legendFormat": "", "refId": "A" }],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "currencyUSD",
+            "color": { "mode": "continuous-GrYlRd", "fixedColor": "#37872D" },
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "#F2495C", "value": null }, { "color": "#FF9830", "value": 100 }, { "color": "#73BF69", "value": 250 }] }
+          }
+        },
+        "options": { "graphMode": "area", "colorMode": "background_solid", "textMode": "auto", "reduceOptions": { "calcs": ["lastNotNull"] }, "justifyMode": "auto" }
+      },
+      {
+        "id": 2,
+        "title": "Active Users",
+        "description": "Live user sessions on the platform",
+        "type": "stat",
+        "gridPos": { "h": 5, "w": 4, "x": 4, "y": 1 },
+        "targets": [{ "expr": "promisetelemetry_business_active_users", "legendFormat": "", "refId": "A" }],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": { "fixedColor": "#3274D9", "mode": "fixed" },
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "#3274D9", "value": null }] }
+          }
+        },
+        "options": { "graphMode": "area", "colorMode": "background_solid", "textMode": "auto", "reduceOptions": { "calcs": ["lastNotNull"] } }
+      },
+      {
+        "id": 3,
+        "title": "Platform CPU",
+        "description": "Average CPU utilization across all microservices",
+        "type": "stat",
+        "gridPos": { "h": 5, "w": 4, "x": 8, "y": 1 },
+        "targets": [{ "expr": "promisetelemetry_platform_cpu_percent", "legendFormat": "", "refId": "A" }],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "color": { "mode": "continuous-GrYlRd" },
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "#73BF69", "value": null }, { "color": "#FF9830", "value": 60 }, { "color": "#F2495C", "value": 80 }] }
+          }
+        },
+        "options": { "graphMode": "area", "colorMode": "background_solid", "textMode": "auto", "reduceOptions": { "calcs": ["lastNotNull"] } }
+      },
+      {
+        "id": 4,
+        "title": "Memory",
+        "description": "Average memory utilization across all microservices",
+        "type": "stat",
+        "gridPos": { "h": 5, "w": 4, "x": 12, "y": 1 },
+        "targets": [{ "expr": "promisetelemetry_platform_memory_percent", "legendFormat": "", "refId": "A" }],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "color": { "mode": "continuous-GrYlRd" },
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "#73BF69", "value": null }, { "color": "#FF9830", "value": 65 }, { "color": "#F2495C", "value": 85 }] }
+          }
+        },
+        "options": { "graphMode": "area", "colorMode": "background_solid", "textMode": "auto", "reduceOptions": { "calcs": ["lastNotNull"] } }
+      },
+      {
+        "id": 5,
+        "title": "Error Rate",
+        "description": "Platform-wide error rate across all services",
+        "type": "stat",
+        "gridPos": { "h": 5, "w": 4, "x": 16, "y": 1 },
+        "targets": [{ "expr": "promisetelemetry_platform_error_rate_percent", "legendFormat": "", "refId": "A" }],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 2,
+            "color": { "mode": "continuous-RdYlGr" },
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "#73BF69", "value": null }, { "color": "#FF9830", "value": 2 }, { "color": "#F2495C", "value": 5 }] }
+          }
+        },
+        "options": { "graphMode": "area", "colorMode": "background_solid", "textMode": "auto", "reduceOptions": { "calcs": ["lastNotNull"] } }
+      },
+      {
+        "id": 6,
+        "title": "Latency",
+        "description": "Average platform response time",
+        "type": "stat",
+        "gridPos": { "h": 5, "w": 4, "x": 20, "y": 1 },
+        "targets": [{ "expr": "promisetelemetry_platform_response_time_ms_milliseconds", "legendFormat": "", "refId": "A" }],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "decimals": 0,
+            "color": { "mode": "continuous-GrYlRd" },
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "#73BF69", "value": null }, { "color": "#FF9830", "value": 200 }, { "color": "#F2495C", "value": 500 }] }
+          }
+        },
+        "options": { "graphMode": "area", "colorMode": "background_solid", "textMode": "auto", "reduceOptions": { "calcs": ["lastNotNull"] } }
+      },
+
+
+      {
+        "id": 101,
+        "type": "row",
+        "title": "📈  BUSINESS & REVENUE",
+        "gridPos": { "h": 1, "w": 24, "x": 0, "y": 6 },
+        "collapsed": false
+      },
+
+      {
+        "id": 10,
+        "title": "Revenue Over Time",
+        "type": "timeseries",
+        "gridPos": { "h": 9, "w": 16, "x": 0, "y": 7 },
+        "targets": [
+          { "expr": "rate(promisetelemetry_business_revenue_usd_total[5m]) * 60", "legendFormat": "Revenue $/min", "refId": "A" }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "currencyUSD",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 35,
+              "gradientMode": "opacity",
+              "lineWidth": 3,
+              "showPoints": "never",
+              "spanNulls": true,
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "scaleDistribution": { "type": "linear" }
+            },
+            "color": { "mode": "fixed", "fixedColor": "#37872D" }
+          }
+        },
+        "options": { "tooltip": { "mode": "single", "sort": "none" }, "legend": { "displayMode": "list", "placement": "bottom" } }
+      },
+      {
+        "id": 11,
+        "title": "Orders Rate",
+        "type": "timeseries",
+        "gridPos": { "h": 9, "w": 8, "x": 16, "y": 7 },
+        "targets": [
+          { "expr": "rate(promisetelemetry_business_orders_total[5m]) * 60", "legendFormat": "Orders/min", "refId": "A" }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "custom": {
+              "drawStyle": "bars",
+              "fillOpacity": 70,
+              "gradientMode": "scheme",
+              "lineWidth": 0,
+              "showPoints": "never",
+              "barMaxWidth": 20
+            },
+            "color": { "mode": "continuous-blues" },
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "#56A64B", "value": null }, { "color": "#3274D9", "value": 5 }] }
+          }
+        },
+        "options": { "tooltip": { "mode": "single" }, "legend": { "displayMode": "list", "placement": "bottom" } }
+      },
+
+
+      {
+        "id": 102,
+        "type": "row",
+        "title": "⚡  PLATFORM PERFORMANCE",
+        "gridPos": { "h": 1, "w": 24, "x": 0, "y": 16 },
+        "collapsed": false
+      },
+
+      {
+        "id": 20,
+        "title": "CPU & Memory Utilization",
+        "type": "timeseries",
+        "gridPos": { "h": 9, "w": 12, "x": 0, "y": 17 },
+        "targets": [
+          { "expr": "promisetelemetry_platform_cpu_percent", "legendFormat": "CPU %", "refId": "A" },
+          { "expr": "promisetelemetry_platform_memory_percent", "legendFormat": "Memory %", "refId": "B" }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 25,
+              "gradientMode": "opacity",
+              "lineWidth": 2,
+              "showPoints": "never",
+              "spanNulls": true,
+              "thresholdsStyle": { "mode": "dashed" }
+            },
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "transparent", "value": null }, { "color": "#F2495C", "value": 85 }] }
+          },
+          "overrides": [
+            { "matcher": { "id": "byName", "options": "CPU %" }, "properties": [{ "id": "color", "value": { "fixedColor": "#FF9830", "mode": "fixed" } }] },
+            { "matcher": { "id": "byName", "options": "Memory %" }, "properties": [{ "id": "color", "value": { "fixedColor": "#B877D9", "mode": "fixed" } }] }
+          ]
+        },
+        "options": { "tooltip": { "mode": "multi", "sort": "desc" }, "legend": { "displayMode": "list", "placement": "bottom", "calcs": ["lastNotNull", "max"] } }
+      },
+      {
+        "id": 21,
+        "title": "Response Time & Error Rate",
+        "type": "timeseries",
+        "gridPos": { "h": 9, "w": 12, "x": 12, "y": 17 },
+        "targets": [
+          { "expr": "promisetelemetry_platform_response_time_ms_milliseconds", "legendFormat": "Avg Latency (ms)", "refId": "A" },
+          { "expr": "promisetelemetry_platform_error_rate_percent", "legendFormat": "Error Rate %", "refId": "B" }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 20,
+              "gradientMode": "opacity",
+              "lineWidth": 2,
+              "showPoints": "never",
+              "spanNulls": true,
+              "thresholdsStyle": { "mode": "off" },
+              "axisPlacement": "auto"
+            }
+          },
+          "overrides": [
+            {
+              "matcher": { "id": "byName", "options": "Avg Latency (ms)" },
+              "properties": [
+                { "id": "unit", "value": "ms" },
+                { "id": "color", "value": { "fixedColor": "#FADE2A", "mode": "fixed" } },
+                { "id": "custom.axisPlacement", "value": "left" }
+              ]
+            },
+            {
+              "matcher": { "id": "byName", "options": "Error Rate %" },
+              "properties": [
+                { "id": "unit", "value": "percent" },
+                { "id": "color", "value": { "fixedColor": "#F2495C", "mode": "fixed" } },
+                { "id": "custom.axisPlacement", "value": "right" },
+                { "id": "custom.fillOpacity", "value": 8 }
+              ]
+            }
+          ]
+        },
+        "options": { "tooltip": { "mode": "multi", "sort": "desc" }, "legend": { "displayMode": "list", "placement": "bottom", "calcs": ["lastNotNull", "max"] } }
+      },
+
+      {
+        "id": 22,
+        "title": "HTTP Server Request Duration",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 26 },
+        "targets": [
+          { "expr": "histogram_quantile(0.50, rate(promisetelemetry_http_server_duration_milliseconds_bucket[5m]))", "legendFormat": "p50", "refId": "A" },
+          { "expr": "histogram_quantile(0.90, rate(promisetelemetry_http_server_duration_milliseconds_bucket[5m]))", "legendFormat": "p90", "refId": "B" },
+          { "expr": "histogram_quantile(0.99, rate(promisetelemetry_http_server_duration_milliseconds_bucket[5m]))", "legendFormat": "p99", "refId": "C" }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 10,
+              "gradientMode": "opacity",
+              "lineWidth": 2,
+              "showPoints": "never",
+              "spanNulls": true
+            }
+          },
+          "overrides": [
+            { "matcher": { "id": "byName", "options": "p50" }, "properties": [{ "id": "color", "value": { "fixedColor": "#73BF69", "mode": "fixed" } }] },
+            { "matcher": { "id": "byName", "options": "p90" }, "properties": [{ "id": "color", "value": { "fixedColor": "#FF9830", "mode": "fixed" } }] },
+            { "matcher": { "id": "byName", "options": "p99" }, "properties": [{ "id": "color", "value": { "fixedColor": "#F2495C", "mode": "fixed" } }, { "id": "custom.lineWidth", "value": 3 }] }
+          ]
+        },
+        "options": { "tooltip": { "mode": "multi", "sort": "desc" }, "legend": { "displayMode": "list", "placement": "bottom", "calcs": ["lastNotNull"] } }
+      },
+      {
+        "id": 23,
+        "title": "HTTP Request Rate",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 26 },
+        "targets": [
+          { "expr": "rate(promisetelemetry_http_server_duration_milliseconds_count[5m])", "legendFormat": "{{ http_route }}", "refId": "A" }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "reqps",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 30,
+              "gradientMode": "opacity",
+              "lineWidth": 2,
+              "showPoints": "never",
+              "stacking": { "mode": "normal", "group": "A" }
+            },
+            "color": { "mode": "palette-classic-by-name" }
+          }
+        },
+        "options": { "tooltip": { "mode": "multi", "sort": "desc" }, "legend": { "displayMode": "table", "placement": "right", "calcs": ["lastNotNull"] } }
+      },
+
+
+      {
+        "id": 103,
+        "type": "row",
+        "title": "🔧  MICROSERVICE HEALTH",
+        "gridPos": { "h": 1, "w": 24, "x": 0, "y": 34 },
+        "collapsed": false
+      },
+
+      {
+        "id": 30,
+        "title": "Service Latency — All Services",
+        "description": "Current latency for each microservice. Red zone = above 400ms.",
+        "type": "bargauge",
+        "gridPos": { "h": 10, "w": 12, "x": 0, "y": 35 },
+        "targets": [
+          { "expr": "promisetelemetry_service_latency_ms_milliseconds_sum / promisetelemetry_service_latency_ms_milliseconds_count", "legendFormat": "{{ service }}", "refId": "A", "instant": true }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#73BF69", "value": null },
+                { "color": "#56A64B", "value": 50 },
+                { "color": "#FADE2A", "value": 150 },
+                { "color": "#FF9830", "value": 300 },
+                { "color": "#F2495C", "value": 500 }
+              ]
+            },
+            "min": 0,
+            "max": 1000
+          }
+        },
+        "options": {
+          "orientation": "horizontal",
+          "displayMode": "gradient",
+          "showUnfilled": true,
+          "reduceOptions": { "calcs": ["lastNotNull"] },
+          "minVizWidth": 8,
+          "minVizHeight": 16,
+          "namePlacement": "auto",
+          "valueMode": "text"
+        }
+      },
+      {
+        "id": 31,
+        "title": "Service Error Rate — All Services",
+        "description": "Current error rate for each microservice. Red zone = above 5%.",
+        "type": "bargauge",
+        "gridPos": { "h": 10, "w": 12, "x": 12, "y": 35 },
+        "targets": [
+          { "expr": "promisetelemetry_service_error_rate_percent", "legendFormat": "{{ service }}", "refId": "A", "instant": true }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#73BF69", "value": null },
+                { "color": "#FADE2A", "value": 1 },
+                { "color": "#FF9830", "value": 3 },
+                { "color": "#F2495C", "value": 5 }
+              ]
+            },
+            "min": 0,
+            "max": 25
+          }
+        },
+        "options": {
+          "orientation": "horizontal",
+          "displayMode": "gradient",
+          "showUnfilled": true,
+          "reduceOptions": { "calcs": ["lastNotNull"] },
+          "minVizWidth": 8,
+          "minVizHeight": 16,
+          "valueMode": "text"
+        }
+      },
+
+      {
+        "id": 32,
+        "title": "Critical Path — Payment, Checkout, Postgres",
+        "description": "Latency for the most critical services in the e-commerce transaction flow",
+        "type": "timeseries",
+        "gridPos": { "h": 9, "w": 16, "x": 0, "y": 45 },
+        "targets": [
+          { "expr": "promisetelemetry_service_latency_ms_milliseconds_sum{service=\"paymentservice\"} / promisetelemetry_service_latency_ms_milliseconds_count{service=\"paymentservice\"}", "legendFormat": "Payment", "refId": "A" },
+          { "expr": "promisetelemetry_service_latency_ms_milliseconds_sum{service=\"checkoutservice\"} / promisetelemetry_service_latency_ms_milliseconds_count{service=\"checkoutservice\"}", "legendFormat": "Checkout", "refId": "B" },
+          { "expr": "promisetelemetry_service_latency_ms_milliseconds_sum{service=\"postgres\"} / promisetelemetry_service_latency_ms_milliseconds_count{service=\"postgres\"}", "legendFormat": "Postgres", "refId": "C" },
+          { "expr": "promisetelemetry_service_latency_ms_milliseconds_sum{service=\"searchservice\"} / promisetelemetry_service_latency_ms_milliseconds_count{service=\"searchservice\"}", "legendFormat": "Search", "refId": "D" }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 15,
+              "gradientMode": "opacity",
+              "lineWidth": 2,
+              "showPoints": "never",
+              "spanNulls": true,
+              "thresholdsStyle": { "mode": "dashed" }
+            },
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "transparent", "value": null }, { "color": "#F2495C", "value": 500 }] }
+          },
+          "overrides": [
+            { "matcher": { "id": "byName", "options": "Payment" }, "properties": [{ "id": "color", "value": { "fixedColor": "#F2495C", "mode": "fixed" } }] },
+            { "matcher": { "id": "byName", "options": "Checkout" }, "properties": [{ "id": "color", "value": { "fixedColor": "#FF9830", "mode": "fixed" } }] },
+            { "matcher": { "id": "byName", "options": "Postgres" }, "properties": [{ "id": "color", "value": { "fixedColor": "#B877D9", "mode": "fixed" } }] },
+            { "matcher": { "id": "byName", "options": "Search" }, "properties": [{ "id": "color", "value": { "fixedColor": "#3274D9", "mode": "fixed" } }] }
+          ]
+        },
+        "options": { "tooltip": { "mode": "multi", "sort": "desc" }, "legend": { "displayMode": "table", "placement": "right", "calcs": ["lastNotNull", "max", "mean"] } }
+      },
+      {
+        "id": 33,
+        "title": "Error Rate — Critical Services",
+        "type": "timeseries",
+        "gridPos": { "h": 9, "w": 8, "x": 16, "y": 45 },
+        "targets": [
+          { "expr": "promisetelemetry_service_error_rate_percent{service=~\"paymentservice|checkoutservice|searchservice|frontend\"}", "legendFormat": "{{ service }}", "refId": "A" }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 20,
+              "gradientMode": "opacity",
+              "lineWidth": 2,
+              "showPoints": "never",
+              "spanNulls": true,
+              "thresholdsStyle": { "mode": "dashed" }
+            },
+            "color": { "mode": "palette-classic-by-name" },
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "transparent", "value": null }, { "color": "#F2495C", "value": 5 }] }
+          }
+        },
+        "options": { "tooltip": { "mode": "multi", "sort": "desc" }, "legend": { "displayMode": "list", "placement": "bottom" } }
+      },
+
+
+      {
+        "id": 104,
+        "type": "row",
+        "title": "🖥️  HOST INFRASTRUCTURE",
+        "gridPos": { "h": 1, "w": 24, "x": 0, "y": 54 },
+        "collapsed": false
+      },
+
+      {
+        "id": 40,
+        "title": "Host CPU",
+        "type": "gauge",
+        "gridPos": { "h": 7, "w": 4, "x": 0, "y": 55 },
+        "targets": [{ "expr": "100 - (avg(rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)", "legendFormat": "", "refId": "A" }],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent", "min": 0, "max": 100, "decimals": 1,
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "#73BF69", "value": null }, { "color": "#FF9830", "value": 60 }, { "color": "#F2495C", "value": 80 }] },
+            "color": { "mode": "thresholds" }
+          }
+        },
+        "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "showThresholdLabels": false, "showThresholdMarkers": true }
+      },
+      {
+        "id": 41,
+        "title": "Host Memory",
+        "type": "gauge",
+        "gridPos": { "h": 7, "w": 4, "x": 4, "y": 55 },
+        "targets": [{ "expr": "(1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100", "legendFormat": "", "refId": "A" }],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent", "min": 0, "max": 100, "decimals": 1,
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "#73BF69", "value": null }, { "color": "#FF9830", "value": 70 }, { "color": "#F2495C", "value": 90 }] },
+            "color": { "mode": "thresholds" }
+          }
+        },
+        "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "showThresholdLabels": false, "showThresholdMarkers": true }
+      },
+      {
+        "id": 42,
+        "title": "Host Disk",
+        "type": "gauge",
+        "gridPos": { "h": 7, "w": 4, "x": 8, "y": 55 },
+        "targets": [{ "expr": "(1 - node_filesystem_avail_bytes{mountpoint=\"/\"} / node_filesystem_size_bytes{mountpoint=\"/\"}) * 100", "legendFormat": "", "refId": "A" }],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent", "min": 0, "max": 100, "decimals": 1,
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "#73BF69", "value": null }, { "color": "#FF9830", "value": 70 }, { "color": "#F2495C", "value": 90 }] },
+            "color": { "mode": "thresholds" }
+          }
+        },
+        "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "showThresholdLabels": false, "showThresholdMarkers": true }
+      },
+      {
+        "id": 43,
+        "title": "Network I/O",
+        "type": "timeseries",
+        "gridPos": { "h": 7, "w": 12, "x": 12, "y": 55 },
+        "targets": [
+          { "expr": "rate(node_network_receive_bytes_total{device!=\"lo\"}[5m])", "legendFormat": "RX {{ device }}", "refId": "A" },
+          { "expr": "-rate(node_network_transmit_bytes_total{device!=\"lo\"}[5m])", "legendFormat": "TX {{ device }}", "refId": "B" }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "Bps",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 25,
+              "gradientMode": "opacity",
+              "lineWidth": 2,
+              "showPoints": "never",
+              "spanNulls": true,
+              "axisCenteredZero": true
+            },
+            "color": { "mode": "palette-classic-by-name" }
+          }
+        },
+        "options": { "tooltip": { "mode": "multi", "sort": "desc" }, "legend": { "displayMode": "list", "placement": "bottom" } }
+      },
+
+
+      {
+        "id": 105,
+        "type": "row",
+        "title": "📡  TELEMETRY PIPELINE",
+        "gridPos": { "h": 1, "w": 24, "x": 0, "y": 62 },
+        "collapsed": false
+      },
+
+      {
+        "id": 50,
+        "title": "Active Alerts",
+        "type": "stat",
+        "gridPos": { "h": 5, "w": 4, "x": 0, "y": 63 },
+        "targets": [{ "expr": "promisetelemetry_alerts_active_count", "legendFormat": "", "refId": "A" }],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "#73BF69", "value": null }, { "color": "#FF9830", "value": 1 }, { "color": "#F2495C", "value": 3 }] },
+            "color": { "mode": "thresholds" }
+          }
+        },
+        "options": { "graphMode": "none", "colorMode": "background_solid", "textMode": "value_and_name", "reduceOptions": { "calcs": ["lastNotNull"] }, "justifyMode": "center" }
+      },
+      {
+        "id": 51,
+        "title": "SSE Clients",
+        "type": "stat",
+        "gridPos": { "h": 5, "w": 4, "x": 4, "y": 63 },
+        "targets": [{ "expr": "promisetelemetry_sse_active_connections", "legendFormat": "", "refId": "A" }],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "color": { "fixedColor": "#8AB8FF", "mode": "fixed" },
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "#8AB8FF", "value": null }] }
+          }
+        },
+        "options": { "graphMode": "area", "colorMode": "background_solid", "textMode": "value_and_name", "reduceOptions": { "calcs": ["lastNotNull"] }, "justifyMode": "center" }
+      },
+      {
+        "id": 52,
+        "title": "Simulation Ticks",
+        "type": "stat",
+        "gridPos": { "h": 5, "w": 4, "x": 8, "y": 63 },
+        "targets": [{ "expr": "rate(promisetelemetry_telemetry_simulation_ticks_total[5m]) * 60", "legendFormat": "", "refId": "A" }],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "decimals": 0,
+            "color": { "fixedColor": "#C0D8FF", "mode": "fixed" },
+            "thresholds": { "mode": "absolute", "steps": [{ "color": "#C0D8FF", "value": null }] }
+          }
+        },
+        "options": { "graphMode": "area", "colorMode": "background_solid", "textMode": "value_and_name", "reduceOptions": { "calcs": ["lastNotNull"] }, "justifyMode": "center" }
+      },
+      {
+        "id": 53,
+        "title": "OTel Pipeline — Telemetry Flow",
+        "description": "Total HTTP requests flowing through the instrumented Express server",
+        "type": "timeseries",
+        "gridPos": { "h": 5, "w": 12, "x": 12, "y": 63 },
+        "targets": [
+          { "expr": "rate(promisetelemetry_http_request_total[5m])", "legendFormat": "{{ method }} {{ route }}", "refId": "A" },
+          { "expr": "rate(promisetelemetry_telemetry_simulation_ticks_total[5m])", "legendFormat": "Simulation Ticks", "refId": "B" }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ops",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 30,
+              "gradientMode": "opacity",
+              "lineWidth": 2,
+              "showPoints": "never",
+              "stacking": { "mode": "normal", "group": "A" }
+            },
+            "color": { "mode": "palette-classic-by-name" }
+          }
+        },
+        "options": { "tooltip": { "mode": "multi", "sort": "desc" }, "legend": { "displayMode": "list", "placement": "bottom" } }
+      }
+
+    ]
+}

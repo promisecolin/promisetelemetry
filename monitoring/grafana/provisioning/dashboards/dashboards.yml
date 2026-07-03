@@ -1,0 +1,12 @@
+apiVersion: 1
+
+providers:
+  - name: PromiseTelemetry
+    orgId: 1
+    folder: PromiseTelemetry
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/json
+      foldersFromFilesStructure: false

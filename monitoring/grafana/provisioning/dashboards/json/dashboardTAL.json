@@ -1,0 +1,921 @@
+{
+    "id": null,
+    "uid": "pt-tal",
+    "title": "PromiseTelemetry — TAL: Tracing, Alerts & Logs + Services",
+    "tags": ["promisetelemetry", "tracing", "alerts", "logs", "services"],
+    "timezone": "browser",
+    "refresh": "10s",
+    "time": { "from": "now-30m", "to": "now" },
+    "style": "dark",
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": { "type": "grafana", "uid": "-- Grafana --" },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "panels": [
+
+      {
+        "id": 100,
+        "type": "text",
+        "title": "",
+        "gridPos": { "h": 2, "w": 24, "x": 0, "y": 0 },
+        "options": {
+          "mode": "markdown",
+          "content": "# 🛰️ SERVICES\n**Real-time health, latency, and error rate for all 17 microservices**"
+        }
+      },
+
+      {
+        "id": 1,
+        "title": "Service Latency — All Services (Live)",
+        "description": "Current latency in milliseconds for every microservice. Red threshold at 400ms.",
+        "type": "bargauge",
+        "gridPos": { "h": 8, "w": 24, "x": 0, "y": 2 },
+        "targets": [
+          {
+            "expr": "promisetelemetry_service_latency_ms_milliseconds_sum / promisetelemetry_service_latency_ms_milliseconds_count",
+            "legendFormat": "{{ service }}",
+            "refId": "A",
+            "instant": true
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "min": 0,
+            "max": 1000,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#37872D", "value": null },
+                { "color": "#FF9830", "value": 200 },
+                { "color": "#C4162A", "value": 400 }
+              ]
+            },
+            "color": { "mode": "thresholds" }
+          }
+        },
+        "options": {
+          "orientation": "horizontal",
+          "displayMode": "gradient",
+          "showUnfilled": true,
+          "minVizWidth": 8,
+          "minVizHeight": 16,
+          "valueMode": "color"
+        }
+      },
+
+      {
+        "id": 2,
+        "title": "Service Error Rate — All Services (Live)",
+        "description": "Current error percentage per microservice. Anything above 5% is critical.",
+        "type": "bargauge",
+        "gridPos": { "h": 8, "w": 24, "x": 0, "y": 10 },
+        "targets": [
+          {
+            "expr": "promisetelemetry_service_error_rate_percent",
+            "legendFormat": "{{ service }}",
+            "refId": "A",
+            "instant": true
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 30,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#37872D", "value": null },
+                { "color": "#FF9830", "value": 2 },
+                { "color": "#C4162A", "value": 5 }
+              ]
+            },
+            "color": { "mode": "thresholds" }
+          }
+        },
+        "options": {
+          "orientation": "horizontal",
+          "displayMode": "gradient",
+          "showUnfilled": true,
+          "minVizWidth": 8,
+          "minVizHeight": 16,
+          "valueMode": "color"
+        }
+      },
+
+      {
+        "id": 3,
+        "title": "Payment Service — Latency Over Time",
+        "type": "timeseries",
+        "gridPos": { "h": 7, "w": 8, "x": 0, "y": 18 },
+        "targets": [
+          {
+            "expr": "promisetelemetry_service_latency_ms_milliseconds_sum{service=\"paymentservice\"} / promisetelemetry_service_latency_ms_milliseconds_count{service=\"paymentservice\"}",
+            "legendFormat": "Payment Latency",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 25,
+              "lineWidth": 2,
+              "gradientMode": "scheme",
+              "thresholdsStyle": { "mode": "line+area" }
+            },
+            "color": { "mode": "fixed", "fixedColor": "#8F3BB8" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "transparent", "value": null },
+                { "color": "rgba(196, 22, 42, 0.15)", "value": 500 }
+              ]
+            }
+          }
+        }
+      },
+
+      {
+        "id": 4,
+        "title": "Checkout Service — Latency Over Time",
+        "type": "timeseries",
+        "gridPos": { "h": 7, "w": 8, "x": 8, "y": 18 },
+        "targets": [
+          {
+            "expr": "promisetelemetry_service_latency_ms_milliseconds_sum{service=\"checkoutservice\"} / promisetelemetry_service_latency_ms_milliseconds_count{service=\"checkoutservice\"}",
+            "legendFormat": "Checkout Latency",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 25,
+              "lineWidth": 2,
+              "gradientMode": "scheme",
+              "thresholdsStyle": { "mode": "line+area" }
+            },
+            "color": { "mode": "fixed", "fixedColor": "#3274D9" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "transparent", "value": null },
+                { "color": "rgba(196, 22, 42, 0.15)", "value": 500 }
+              ]
+            }
+          }
+        }
+      },
+
+      {
+        "id": 5,
+        "title": "Postgres — Latency Over Time",
+        "type": "timeseries",
+        "gridPos": { "h": 7, "w": 8, "x": 16, "y": 18 },
+        "targets": [
+          {
+            "expr": "promisetelemetry_service_latency_ms_milliseconds_sum{service=\"postgres\"} / promisetelemetry_service_latency_ms_milliseconds_count{service=\"postgres\"}",
+            "legendFormat": "Postgres Latency",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 25,
+              "lineWidth": 2,
+              "gradientMode": "scheme",
+              "thresholdsStyle": { "mode": "line+area" }
+            },
+            "color": { "mode": "fixed", "fixedColor": "#FF9830" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "transparent", "value": null },
+                { "color": "rgba(196, 22, 42, 0.15)", "value": 400 }
+              ]
+            }
+          }
+        }
+      },
+
+      {
+        "id": 6,
+        "title": "Frontend — Latency Over Time",
+        "type": "timeseries",
+        "gridPos": { "h": 7, "w": 8, "x": 0, "y": 25 },
+        "targets": [
+          {
+            "expr": "promisetelemetry_service_latency_ms_milliseconds_sum{service=\"frontend\"} / promisetelemetry_service_latency_ms_milliseconds_count{service=\"frontend\"}",
+            "legendFormat": "Frontend Latency",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 25,
+              "lineWidth": 2,
+              "gradientMode": "scheme"
+            },
+            "color": { "mode": "fixed", "fixedColor": "#56A64B" }
+          }
+        }
+      },
+
+      {
+        "id": 7,
+        "title": "Search Service — Latency Over Time",
+        "type": "timeseries",
+        "gridPos": { "h": 7, "w": 8, "x": 8, "y": 25 },
+        "targets": [
+          {
+            "expr": "promisetelemetry_service_latency_ms_milliseconds_sum{service=\"searchservice\"} / promisetelemetry_service_latency_ms_milliseconds_count{service=\"searchservice\"}",
+            "legendFormat": "Search Latency",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 25,
+              "lineWidth": 2,
+              "gradientMode": "scheme",
+              "thresholdsStyle": { "mode": "line+area" }
+            },
+            "color": { "mode": "fixed", "fixedColor": "#E0B400" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "transparent", "value": null },
+                { "color": "rgba(196, 22, 42, 0.15)", "value": 500 }
+              ]
+            }
+          }
+        }
+      },
+
+      {
+        "id": 8,
+        "title": "Error Rate — Critical Services Over Time",
+        "description": "Error rates for payment, checkout, search, and postgres over time",
+        "type": "timeseries",
+        "gridPos": { "h": 7, "w": 8, "x": 16, "y": 25 },
+        "targets": [
+          {
+            "expr": "promisetelemetry_service_error_rate_percent{service=~\"paymentservice|checkoutservice|searchservice|postgres\"}",
+            "legendFormat": "{{ service }}",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 15,
+              "lineWidth": 2,
+              "gradientMode": "scheme",
+              "thresholdsStyle": { "mode": "line" }
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "red", "value": 5 }
+              ]
+            }
+          }
+        }
+      },
+
+      {
+        "id": 200,
+        "type": "text",
+        "title": "",
+        "gridPos": { "h": 2, "w": 24, "x": 0, "y": 32 },
+        "options": {
+          "mode": "markdown",
+          "content": "# 📡 TRACING\n**Distributed trace pipeline — throughput, latency distributions, and per-route performance**"
+        }
+      },
+
+      {
+        "id": 9,
+        "title": "Trace Pipeline Throughput",
+        "description": "Rate of telemetry simulation ticks — each tick generates 3 distributed traces",
+        "type": "timeseries",
+        "gridPos": { "h": 7, "w": 8, "x": 0, "y": 34 },
+        "targets": [
+          {
+            "expr": "rate(promisetelemetry_telemetry_simulation_ticks_total[5m])",
+            "legendFormat": "Ticks/sec",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ops",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 30,
+              "lineWidth": 2,
+              "gradientMode": "scheme"
+            },
+            "color": { "mode": "fixed", "fixedColor": "#8F3BB8" }
+          }
+        }
+      },
+
+      {
+        "id": 10,
+        "title": "HTTP Server Request Duration (p50 / p95 / p99)",
+        "description": "Auto-instrumented Express server latency percentiles",
+        "type": "timeseries",
+        "gridPos": { "h": 7, "w": 8, "x": 8, "y": 34 },
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, rate(promisetelemetry_http_server_duration_milliseconds_bucket[5m]))",
+            "legendFormat": "p50",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(promisetelemetry_http_server_duration_milliseconds_bucket[5m]))",
+            "legendFormat": "p95",
+            "refId": "B"
+          },
+          {
+            "expr": "histogram_quantile(0.99, rate(promisetelemetry_http_server_duration_milliseconds_bucket[5m]))",
+            "legendFormat": "p99",
+            "refId": "C"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 10,
+              "lineWidth": 2
+            }
+          },
+          "overrides": [
+            { "matcher": { "id": "byName", "options": "p50" }, "properties": [{ "id": "color", "value": { "fixedColor": "#37872D", "mode": "fixed" } }] },
+            { "matcher": { "id": "byName", "options": "p95" }, "properties": [{ "id": "color", "value": { "fixedColor": "#FF9830", "mode": "fixed" } }] },
+            { "matcher": { "id": "byName", "options": "p99" }, "properties": [{ "id": "color", "value": { "fixedColor": "#C4162A", "mode": "fixed" } }] }
+          ]
+        }
+      },
+
+      {
+        "id": 11,
+        "title": "Request Rate by Route",
+        "description": "HTTP requests per second broken down by API route",
+        "type": "timeseries",
+        "gridPos": { "h": 7, "w": 8, "x": 16, "y": 34 },
+        "targets": [
+          {
+            "expr": "rate(promisetelemetry_http_server_duration_milliseconds_count[5m])",
+            "legendFormat": "{{ http_route }}",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "reqps",
+            "custom": {
+              "drawStyle": "bars",
+              "fillOpacity": 60,
+              "lineWidth": 1,
+              "stacking": { "mode": "normal", "group": "A" },
+              "gradientMode": "scheme"
+            }
+          }
+        }
+      },
+
+      {
+        "id": 12,
+        "title": "Custom Request Duration by Route (p95)",
+        "description": "Custom instrumented endpoint latency percentiles",
+        "type": "timeseries",
+        "gridPos": { "h": 7, "w": 12, "x": 0, "y": 41 },
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(promisetelemetry_http_request_duration_ms_milliseconds_bucket[5m]))",
+            "legendFormat": "{{ method }} {{ route }} p95",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 20,
+              "lineWidth": 2,
+              "gradientMode": "scheme"
+            }
+          }
+        }
+      },
+
+      {
+        "id": 13,
+        "title": "SSE Active Connections",
+        "description": "Number of live Server-Sent Event streaming clients connected to the app",
+        "type": "timeseries",
+        "gridPos": { "h": 7, "w": 12, "x": 12, "y": 41 },
+        "targets": [
+          {
+            "expr": "promisetelemetry_sse_active_connections",
+            "legendFormat": "SSE Clients",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "stepAfter",
+              "fillOpacity": 40,
+              "lineWidth": 2,
+              "gradientMode": "scheme"
+            },
+            "color": { "mode": "fixed", "fixedColor": "#3274D9" }
+          }
+        }
+      },
+
+      {
+        "id": 300,
+        "type": "text",
+        "title": "",
+        "gridPos": { "h": 2, "w": 24, "x": 0, "y": 48 },
+        "options": {
+          "mode": "markdown",
+          "content": "# 🚨 ALERTS\n**Active alert count, platform error rate, and alarm threshold monitoring**"
+        }
+      },
+
+      {
+        "id": 14,
+        "title": "Active Alerts",
+        "description": "Number of currently firing alerts in the PromiseTelemetry platform",
+        "type": "stat",
+        "gridPos": { "h": 5, "w": 6, "x": 0, "y": 50 },
+        "targets": [
+          {
+            "expr": "promisetelemetry_alerts_active_count",
+            "legendFormat": "Active",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#37872D", "value": null },
+                { "color": "#FF9830", "value": 1 },
+                { "color": "#C4162A", "value": 3 }
+              ]
+            },
+            "mappings": [
+              { "type": "value", "options": { "0": { "text": "ALL CLEAR", "color": "#37872D" } } }
+            ]
+          }
+        },
+        "options": {
+          "textMode": "auto",
+          "graphMode": "area",
+          "colorMode": "background",
+          "justifyMode": "center",
+          "reduceOptions": { "calcs": ["lastNotNull"] }
+        }
+      },
+
+      {
+        "id": 15,
+        "title": "Platform Error Rate",
+        "description": "Current platform-wide error percentage",
+        "type": "gauge",
+        "gridPos": { "h": 5, "w": 6, "x": 6, "y": 50 },
+        "targets": [
+          {
+            "expr": "promisetelemetry_platform_error_rate_percent",
+            "legendFormat": "Error %",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 15,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#37872D", "value": null },
+                { "color": "#FF9830", "value": 2 },
+                { "color": "#C4162A", "value": 5 }
+              ]
+            }
+          }
+        }
+      },
+
+      {
+        "id": 16,
+        "title": "Platform Latency",
+        "description": "Current platform average response time",
+        "type": "gauge",
+        "gridPos": { "h": 5, "w": 6, "x": 12, "y": 50 },
+        "targets": [
+          {
+            "expr": "promisetelemetry_platform_response_time_ms_milliseconds",
+            "legendFormat": "Latency",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "min": 0,
+            "max": 1000,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#37872D", "value": null },
+                { "color": "#FF9830", "value": 300 },
+                { "color": "#C4162A", "value": 500 }
+              ]
+            }
+          }
+        }
+      },
+
+      {
+        "id": 17,
+        "title": "HTTP Request Count",
+        "description": "Total HTTP requests processed by the application",
+        "type": "stat",
+        "gridPos": { "h": 5, "w": 6, "x": 18, "y": 50 },
+        "targets": [
+          {
+            "expr": "rate(promisetelemetry_http_request_total[5m])",
+            "legendFormat": "Req/s",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "reqps",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#3274D9", "value": null }
+              ]
+            }
+          }
+        },
+        "options": {
+          "graphMode": "area",
+          "colorMode": "background",
+          "justifyMode": "center",
+          "reduceOptions": { "calcs": ["lastNotNull"] }
+        }
+      },
+
+      {
+        "id": 18,
+        "title": "Active Alerts Over Time",
+        "description": "Timeline of active alert count — spikes indicate incidents",
+        "type": "timeseries",
+        "gridPos": { "h": 7, "w": 12, "x": 0, "y": 55 },
+        "targets": [
+          {
+            "expr": "promisetelemetry_alerts_active_count",
+            "legendFormat": "Active Alerts",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "stepAfter",
+              "fillOpacity": 40,
+              "lineWidth": 2,
+              "gradientMode": "scheme",
+              "thresholdsStyle": { "mode": "area" }
+            },
+            "color": { "mode": "fixed", "fixedColor": "#FF9830" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "transparent", "value": null },
+                { "color": "rgba(196, 22, 42, 0.2)", "value": 1 }
+              ]
+            }
+          }
+        }
+      },
+
+      {
+        "id": 19,
+        "title": "Error Rate vs Latency — Correlation",
+        "description": "Overlay of platform error rate and response time to spot correlated incidents",
+        "type": "timeseries",
+        "gridPos": { "h": 7, "w": 12, "x": 12, "y": 55 },
+        "targets": [
+          {
+            "expr": "promisetelemetry_platform_error_rate_percent",
+            "legendFormat": "Error Rate %",
+            "refId": "A"
+          },
+          {
+            "expr": "promisetelemetry_platform_response_time_ms_milliseconds / 10",
+            "legendFormat": "Latency (÷10 for scale)",
+            "refId": "B"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 15,
+              "lineWidth": 2,
+              "gradientMode": "scheme"
+            }
+          },
+          "overrides": [
+            { "matcher": { "id": "byName", "options": "Error Rate %" }, "properties": [{ "id": "color", "value": { "fixedColor": "#C4162A", "mode": "fixed" } }] },
+            { "matcher": { "id": "byName", "options": "Latency (÷10 for scale)" }, "properties": [{ "id": "color", "value": { "fixedColor": "#3274D9", "mode": "fixed" } }] }
+          ]
+        }
+      },
+
+      {
+        "id": 400,
+        "type": "text",
+        "title": "",
+        "gridPos": { "h": 2, "w": 24, "x": 0, "y": 62 },
+        "options": {
+          "mode": "markdown",
+          "content": "# 📋 LOGS & ACTIVITY\n**Application activity signals — orders, revenue, users, and OTel pipeline health**"
+        }
+      },
+
+      {
+        "id": 20,
+        "title": "Orders Processed",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 0, "y": 64 },
+        "targets": [
+          {
+            "expr": "rate(promisetelemetry_business_orders_total[5m]) * 60",
+            "legendFormat": "Orders/min",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#C4162A", "value": null },
+                { "color": "#FF9830", "value": 3 },
+                { "color": "#37872D", "value": 6 }
+              ]
+            },
+            "mappings": []
+          }
+        },
+        "options": {
+          "graphMode": "area",
+          "colorMode": "background",
+          "justifyMode": "center",
+          "textMode": "auto",
+          "reduceOptions": { "calcs": ["lastNotNull"] }
+        }
+      },
+
+      {
+        "id": 21,
+        "title": "Revenue",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 6, "y": 64 },
+        "targets": [
+          {
+            "expr": "rate(promisetelemetry_business_revenue_usd_total[5m]) * 60",
+            "legendFormat": "$/min",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "currencyUSD",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#C4162A", "value": null },
+                { "color": "#FF9830", "value": 100 },
+                { "color": "#37872D", "value": 250 }
+              ]
+            }
+          }
+        },
+        "options": {
+          "graphMode": "area",
+          "colorMode": "background",
+          "justifyMode": "center",
+          "reduceOptions": { "calcs": ["lastNotNull"] }
+        }
+      },
+
+      {
+        "id": 22,
+        "title": "Active Users",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 12, "y": 64 },
+        "targets": [
+          {
+            "expr": "promisetelemetry_business_active_users",
+            "legendFormat": "Users",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#3274D9", "value": null },
+                { "color": "#37872D", "value": 500 }
+              ]
+            }
+          }
+        },
+        "options": {
+          "graphMode": "area",
+          "colorMode": "background",
+          "justifyMode": "center",
+          "reduceOptions": { "calcs": ["lastNotNull"] }
+        }
+      },
+
+      {
+        "id": 23,
+        "title": "OTel Pipeline Tick Rate",
+        "description": "Telemetry simulation tick rate — confirms the OTel pipeline is alive",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 18, "y": 64 },
+        "targets": [
+          {
+            "expr": "rate(promisetelemetry_telemetry_simulation_ticks_total[5m])",
+            "legendFormat": "ticks/s",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ops",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#C4162A", "value": null },
+                { "color": "#37872D", "value": 0.3 }
+              ]
+            }
+          }
+        },
+        "options": {
+          "graphMode": "area",
+          "colorMode": "background",
+          "justifyMode": "center",
+          "reduceOptions": { "calcs": ["lastNotNull"] }
+        }
+      },
+
+      {
+        "id": 24,
+        "title": "Revenue & Orders Trend",
+        "type": "timeseries",
+        "gridPos": { "h": 7, "w": 12, "x": 0, "y": 68 },
+        "targets": [
+          {
+            "expr": "rate(promisetelemetry_business_revenue_usd_total[5m]) * 60",
+            "legendFormat": "Revenue $/min",
+            "refId": "A"
+          },
+          {
+            "expr": "rate(promisetelemetry_business_orders_total[5m]) * 60 * 30",
+            "legendFormat": "Orders/min (×30 scale)",
+            "refId": "B"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 20,
+              "lineWidth": 2,
+              "gradientMode": "scheme"
+            }
+          },
+          "overrides": [
+            { "matcher": { "id": "byName", "options": "Revenue $/min" }, "properties": [{ "id": "color", "value": { "fixedColor": "#37872D", "mode": "fixed" } }] },
+            { "matcher": { "id": "byName", "options": "Orders/min (×30 scale)" }, "properties": [{ "id": "color", "value": { "fixedColor": "#3274D9", "mode": "fixed" } }] }
+          ]
+        }
+      },
+
+      {
+        "id": 25,
+        "title": "Active Users Over Time",
+        "type": "timeseries",
+        "gridPos": { "h": 7, "w": 12, "x": 12, "y": 68 },
+        "targets": [
+          {
+            "expr": "promisetelemetry_business_active_users",
+            "legendFormat": "Active Users",
+            "refId": "A"
+          }
+        ],
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 30,
+              "lineWidth": 2,
+              "gradientMode": "scheme"
+            },
+            "color": { "mode": "fixed", "fixedColor": "#8F3BB8" }
+          }
+        }
+      }
+    ]
+}

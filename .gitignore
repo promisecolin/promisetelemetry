@@ -1,0 +1,17 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+*.zip
+.env*
+!.env.example
+!monitoring/.env.example
+monitoring/.env
+grafana-data/
+prometheus-data/
+
+# Sensitive deployment credentials
+DEPLOYMENT.md
+aws/

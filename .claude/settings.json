@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ssh -o ConnectTimeout=10 -i \"C:/Users/promise/.ssh/promisetelemetry-key.pem\" ubuntu@44.195.208.73 \"sudo docker logs otel-collector 2>&1 | tail -3\")",
+      "Bash(curl -s \"http://44.195.208.73:9090/api/v1/label/__name__/values\")",
+      "Bash(python3 -c \"import sys,json; names=[n for n in json.loads\\(sys.stdin.read\\(\\)\\)['data'] if 'promisetelemetry' in n]; print\\('\\\\n'.join\\(sorted\\(names\\)\\)\\)\")",
+      "Bash(curl -s \"http://44.195.208.73:9090/api/v1/query?query=promisetelemetry_service_latency_ms_milliseconds_sum\")",
+      "Bash(curl -s \"http://44.195.208.73:9090/api/v1/query?query=promisetelemetry_service_error_rate_percent\")"
+    ]
+  }
+}
