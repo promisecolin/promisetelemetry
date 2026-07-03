@@ -1,0 +1,123 @@
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: promisetelemetry-alerts
+    folder: PromiseTelemetry Alerts
+    interval: 1m
+    rules:
+      - uid: pt-high-platform-cpu
+        title: High Platform CPU
+        condition: C
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Platform CPU has been above 85% for 2 minutes.
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: PBFA97CFB590B2093
+            model:
+              refId: A
+              instant: true
+              expr: promisetelemetry_platform_cpu_percent
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator:
+                    type: gt
+                    params: [85]
+
+      - uid: pt-high-checkout-error-rate
+        title: High Checkout Error Rate
+        condition: C
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: checkoutservice error rate has been above 5% for 2 minutes.
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: PBFA97CFB590B2093
+            model:
+              refId: A
+              instant: true
+              expr: promisetelemetry_service_error_rate_percent{service="checkoutservice"}
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator:
+                    type: gt
+                    params: [5]
+
+      - uid: pt-high-payment-latency
+        title: High Payment Service Latency
+        condition: C
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: paymentservice average latency has been above 500ms for 2 minutes.
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: PBFA97CFB590B2093
+            model:
+              refId: A
+              instant: true
+              expr: rate(promisetelemetry_service_latency_ms_milliseconds_sum{service="paymentservice"}[5m]) / rate(promisetelemetry_service_latency_ms_milliseconds_count{service="paymentservice"}[5m])
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator:
+                    type: gt
+                    params: [500]
+
+      - uid: pt-high-platform-memory
+        title: High Platform Memory
+        condition: C
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Platform memory has been above 85% for 5 minutes.
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: PBFA97CFB590B2093
+            model:
+              refId: A
+              instant: true
+              expr: promisetelemetry_platform_memory_percent
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              refId: C
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator:
+                    type: gt
+                    params: [85]
